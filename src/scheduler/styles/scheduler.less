@@ -1,0 +1,176 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #fafafa ;
+}
+
+.m1 { margin: 1rem; }
+.m05 { margin: .5rem; }
+.m025 { margin: .25rem; }
+.mv1 { margin-top: 1rem; margin-bottom: 1rem; }
+.mv05 { margin-top: .5rem; margin-bottom: 0.5rem; }
+.mv025 { margin-top: .25rem; margin-bottom: 0.25rem; }
+
+@left-side-width: 15%;
+@right-side-width: 80%;
+@column-width: 14%;
+
+@screen-xs: 480px;
+@screen-sm: 768px;
+@screen-md: 992px;
+@screen-lg: 1200px;
+
+@default-bg: #FFF;
+@header-bg: #DDD;
+@cell-bg: #EEF;
+
+@cell-item-bg: #2e6da4;
+@cell-item-fg: #FFF;
+
+
+.scheduler-filter {
+  width: 200px;
+  margin: 10px 75px 10px auto;
+}
+
+.scheduler {
+  .hidden {
+    display: none;
+  }
+
+  width: 100%;
+  .interval {
+    background: @default-bg;
+    padding: 1px;
+    .interval-content {
+      background: @cell-bg;
+      height: 75px;
+    }
+  }
+
+  .schedule-item {
+    width: 100%;
+    height: 100%;
+    background: @cell-item-bg;
+    text-align: center;
+    cursor: pointer;
+    padding: 5px;
+
+    .item-name {
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 1rem;
+      color: #FFF;
+    }
+    .item-subname {
+      font-size: 1.2rem;
+      color: #CCC;
+    }
+  }
+
+  .header {
+    width: 100%;
+    height: 50px;
+    .corner {
+      height: 100%;
+      float: left;
+      width: @left-side-width;
+      background: @default-bg;
+    }
+    .day-titles {
+      height: 100%;
+      float: left;
+      width: @right-side-width;
+
+      .day-title-wrap {
+        padding: 1px;
+        background: @default-bg;
+
+        float: left;
+        width: @column-width;
+        height: 100%;
+
+        .day-title {
+          width: 100%;
+          height: 100%;
+          
+          text-align: center;
+          font-size: 1.1rem;
+          font-weight: bold;
+          // margin: 1px;
+          background: @header-bg;
+          padding-top: 15px;
+
+          @media (max-width: @screen-md) {
+            font-size: 1.6rem;
+          }
+          @media (max-width: @screen-sm) {
+            font-size: 1.5rem;
+            padding-top: 12px;
+          }
+        }
+      }
+
+    }
+  }
+
+  .sidebar {
+    float: left;
+    width: @left-side-width;
+
+    .interval {
+      .interval-content {
+        background: @header-bg;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+        padding-top: 30px;
+      }
+    }
+  }
+
+  .week {
+    float: left;
+    width: @right-side-width;
+
+    .day {
+      float: left;
+      width: @column-width;
+    }
+  }
+}
+
+.button {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.schedule-popup {
+  .calendar-data {
+    .calendar-item {
+      cursor: pointer;
+      &.active {
+        // background-color: #78a;
+      }
+    }
+  }  
+}
+
+.schedule-list {
+  .list-block-content {
+    .list-item {
+      margin: 2px 0px;
+      span.label {
+        margin-right: 30px;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+select.form-control,
+.btn {
+  border-radius: 0px;
+}

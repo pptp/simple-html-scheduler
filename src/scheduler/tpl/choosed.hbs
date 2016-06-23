@@ -1,0 +1,16 @@
+{{#each choosed}}
+  <div class="choosed-item">
+    <div class="choosed-date">{{ [helpers/date_format] date }}</div>
+    <div class="choosed-interval">{{ interval.start }} - {{ interval.end }}</div>
+    <div class="choosed-item">
+      <div class="item-name">{{ item.name }}</div>
+      <div class="item-desc">{{ item.desc }}</div>
+    </div>
+  
+    <div class="button button-remove-choosed" data-id="{{id}}">
+      Убрать
+    </div>
+  </div>
+
+  <hr />
+{{/each}}

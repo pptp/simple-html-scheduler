@@ -1,0 +1,80 @@
+
+
+<div>
+  <div class="col col-xs-12 col-md-10 col-lg-8">
+
+    <div class="scheduler-filter">
+      <select class="filter-select form-control">
+        <option value=""></option>
+        {{#each items}}
+          <option value="{{id}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    
+    <div class="scheduler">
+      <div class="header">
+        <div class="corner"></div>
+        <div class="day-titles">
+          {{#each days}}
+            <div class="day-title-wrap">
+              <div class="day-title visible-md visible-lg" data-day="{{id}}">{{name}}</div>
+              <div class="day-title visible-xs visible-sm" data-day="{{id}}">{{short}}</div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="sidebar">
+        {{#each intervals}}
+          <div class="interval" data-interval="{{id}}">
+            <div class="interval-content">
+              {{start}} - {{end}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+
+      <div class="week">
+        {{#each days}}
+          <div class="day" data-day="{{id}}">
+            {{#each ../intervals}}
+              <div class="interval" data-interval="{{id}}">
+                <div class="interval-content">
+                  <!-- [helpers/get_item] ../../items ../../schedule ../id id  -->
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div style="clear:both;"></div> -->
+
+<!-- <div class="choosed-items"></div> -->
+<div class="schedule-popup modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Запись</h4>
+      </div>
+      <div class="modal-body schedule-popup-content">
+        <!-- If you see this dialog, it means that everything works <span class="glyphicon glyphicon-ok"></span> OK -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-apply" data-dismiss="modal">Хорошо</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="schedule-list col
+      col-lg-6 col-md-8 col-sm-9 col-xs-10
+      col-xs-offset-1">
+  </div>
+</div>
+

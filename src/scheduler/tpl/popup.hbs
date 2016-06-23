@@ -1,0 +1,30 @@
+<div class="item-data">
+  <h3 class="item-name lead">
+    {{ schedule.item.name }}
+    <small>
+      {{ schedule.day.name }}
+      {{ schedule.interval.start }} - {{ schedule.interval.end }}
+    </small>
+  </h3>
+  <p class="item-desc">{{ schedule.item.desc }}</p>
+</div>
+<!--
+<div class="schedule-data">
+  <div class="schedule-day"></div>
+  <div class="schedule-interval"></div>
+</div>
+-->
+<h3>Доступные даты:</h3>
+<div class="calendar-data">
+  <ul>
+    {{#each days}}
+      <div>
+        <button type="button"
+            class="btn btn-lg btn-default calendar-item mv05 {{#if isActive}}active{{/if}}"
+            data-date="{{ [helpers/date_string] date }}">
+          {{ [helpers/date_format] date }}
+        </button>
+      </div>
+    {{/each}}
+  </ul>
+</div>
