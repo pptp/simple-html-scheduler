@@ -1,0 +1,14 @@
+{
+  "api": {
+    "save": "/dummy",
+    "load": "./data.schedule.json"
+  },
+  "options": {
+    "calendarInterval": 30,
+    "subscribesCount": 5
+  },
+  "schedule": {
+    "interval": 60,
+    "hideUnusedIntervals": true
+  }
+}

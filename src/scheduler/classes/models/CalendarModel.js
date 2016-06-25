@@ -1,6 +1,7 @@
 "use strict";
 
 import emitter from '../Emitter';
+import config from '../Config';
 
 module.exports = class CalendarModel {
   constructor(config) {
@@ -16,7 +17,7 @@ module.exports = class CalendarModel {
   hashSchedule(schedule) {
     return JSON.stringify({
       day: schedule.day.id,
-      interval: schedule.interval.id,
+      startMins: schedule.startMins,
       item: schedule.item.id,
     });
   }
@@ -70,7 +71,7 @@ module.exports = class CalendarModel {
     let date = new Date();
 
     let id = 0;
-    for (let i = 0; i < this.options.calendarInterval; i++) {
+    for (let i = 0; i < config('options.calendarInterval'); i++) {
       if (schedule.day.id == getNormalDay(date)) {
         days.push({id: id++, date: date});
       }
@@ -97,14 +98,14 @@ module.exports = class CalendarModel {
       let item = this.items.get(scheduleHash);
       let schedule = item.schedule;
       for (let day of item.days) {
-        form.append('interval[]', schedule.interval.id);
+        form.append('time[]', schedule.time);
         form.append('item[]', schedule.item.id);
         form.append('day[]', day.toDateString());
       }
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", this.config.options.saveUrl);
+    xhr.open("POST", config('api.save'));
     xhr.send(form);
     xhr.onreadystatechange = function() { // (3)
       if (xhr.readyState != 4) return;

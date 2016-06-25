@@ -17,8 +17,8 @@ let pathList = {
 
 module.exports = {
   entry: [
-    'webpack-dev-server/client?http://localhost:8086/',
-    "webpack/hot/dev-server",
+    // 'webpack-dev-server/client?http://localhost:8086/',
+    // "webpack/hot/dev-server",
     './src/app.js',
   ],
   debug: true,
@@ -58,9 +58,10 @@ module.exports = {
           'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
         ]
       },
-      { test: /\.json/, loader: 'url-loader', exclude: /(node_modules|bower_components)/ },
+      // { test: /\.json/, loader: 'url-loader', exclude: /(node_modules|bower_components)/ },
+      { test: /\.json$/, loader: 'json', exclude: /(node_modules|bower_components)/ },
       // { test: /bootstrap\/js\//, loader: 'imports?jQuery=jquery' },
-      { test: /\.hbs/, loader: 'handlebars-loader', exclude: /(node_modules|bower_components)/ },
+      { test: /\.hbs$/, loader: 'handlebars-loader', exclude: /(node_modules|bower_components)/ },
       { test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/font-woff' },
       { test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=application/octet-stream' },
       { test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: 'file' },
@@ -92,6 +93,7 @@ module.exports = {
       // jQuery: 'jquery',
       // 'window.jQuery': 'jquery'
     }),
+    // new webpack.optimize.UglifyJsPlugin({minimize: true}),
     new ExtractTextPlugin('[name].css', {
       allChunks: true
     }),

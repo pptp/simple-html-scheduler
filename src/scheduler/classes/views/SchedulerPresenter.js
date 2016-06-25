@@ -5,6 +5,7 @@ import tplItem from '../../tpl/item.hbs';
 import tplPopup from '../../tpl/popup.hbs';
 
 import emitter from '../Emitter';
+import config from '../Config';
 
 // console.log(emitter);
 // debugger;
@@ -18,13 +19,16 @@ module.exports = class SchedulerPresenter {
     this.root = root;
     this.els = {};
 
+    this.intervals = data.intervals;
+
     this.render(data.days, data.intervals, data.items);
+
+    // console.log('intervals:', this.intervals);
+    // console.log('els:', this.els);
+    // console.log('schedules:', data.schedules);
+
     this.renderSchedules(data.schedules);
     this.handleEvents();
-    
-
-    // emitter.on('filter-items', val => console.log("val"));
-
   }
 
   turnAnimationOn() {
@@ -43,28 +47,70 @@ module.exports = class SchedulerPresenter {
     this.updateEls();
   }
 
+  getIntervalIdOfSchedule(schedule) {
+    let startMins = schedule.startMins;
+    for (let interval of this.intervals) {
+      let mins = +interval.startMins;
+      if (mins <= startMins && (mins + config('schedule.interval')) > startMins) {
+        return interval.id;
+      }
+    }
+  }
+
+  getPositionOfSchedule(schedule) {
+    let intervalId = this.getIntervalIdOfSchedule(schedule);
+    return {
+      intervalId: +intervalId,
+      length: schedule.duration * this.mpp,
+      offset: (schedule.min - intervalId) * this.mpp,
+    }
+  }
+
   renderSchedules(schedules) {
-    // console.log("Schedules");
-    // console.log(schedules);
     schedules.forEach(schedule => {
+      let pos = this.getPositionOfSchedule(schedule);
       let element = this.renderSchedule(schedule);
 
+      element.style.height = pos.length + 'px';
+      element.style.top = pos.offset + 'px';
+
+      this.els.ceils[+schedule.day.id][pos.intervalId].ceil
+        .getElementsByClassName("interval-content")[0]
+        .appendChild(element);
+      this.els.ceils[+schedule.day.id][pos.intervalId].schedule = element;
+
+      /*
       if (this.els.ceils[schedule.day.id] && this.els.ceils[schedule.day.id][schedule.interval.id]) {
         this.els.ceils[schedule.day.id][schedule.interval.id].ceil
             .getElementsByClassName("interval-content")[0]
             .appendChild(element);
         this.els.ceils[schedule.day.id][schedule.interval.id].schedule = element;
       }
+      */
     });
   }
 
   renderSchedule(schedule) {
+    // debugger;
     let element = document.createElement("div");
     element.classList.add("schedule-item");
+    element.dataset.startMins = schedule.startMins;
     element.innerHTML = tplItem(schedule);
+    if (schedule.item.color) {
+      element.style.backgroundColor = schedule.item.color;
+    }
     return element;
   }
 
+  set intervalHeight(val) {
+    // console.log("Set intervalHeight:", val);
+    this._intervalHeight = +val;
+    this.mpp = this.intervalHeight / (+config('schedule.interval'));
+  }
+  get intervalHeight() {
+
+    return this._intervalHeight;
+  }
   
   updateEls() {
     this.els.week = this.els.scheduler.getElementsByClassName('week')[0];
@@ -85,6 +131,10 @@ module.exports = class SchedulerPresenter {
       this.els.ceils[dayId] = {};
       let intervals = day.getElementsByClassName('interval');
       Array.prototype.forEach.call(intervals, interval => {
+        if (!this.intervalHeight) {
+          this.intervalHeight = $(interval).height();
+        }
+
         let intervalId = interval.dataset.interval;
         if (!this.els.intervals[intervalId]) {
           this.els.intervals[intervalId] = [];
@@ -113,9 +163,10 @@ module.exports = class SchedulerPresenter {
         if (!ceil || !ceil.schedule) {
           continue;
         }
+
         ceil.schedule.addEventListener("click", event => emitter.emit('click-schedule', {
-          dayId: dayId,
-          intervalId: intervalId
+          dayId: +dayId,
+          startMins: +ceil.schedule.dataset.startMins
         }));
         // let visible = !!schedules.find(schedule => schedule.day.id == dayId && schedule.interval.id == intervalId);
         // this.toggleSchedule(dayId, intervalId, visible);
@@ -125,20 +176,27 @@ module.exports = class SchedulerPresenter {
 
 
   filter(data) {
-    this.filterIntervals(data.intervalIds);
+    if (config('schedule.hideUnusedIntervals')) {
+      this.filterIntervals(data.intervalIds);
+    }
     this.filterCeils(data.schedules);
   }
 
   filterIntervals(intervalIds) {
+    // debugger;
     for (let intervalId in this.els.intervals) {
-      this.toggleInterval(intervalId, intervalIds.indexOf(intervalId) !== -1);
+      this.toggleInterval(intervalId, intervalIds.indexOf(+intervalId) !== -1);
     }
   }
 
   filterCeils(schedules) {
+    // debugger;
     for (let dayId in this.els.ceils) {
       for (let intervalId in this.els.ceils[dayId]) {
-        let visible = !!schedules.find(schedule => schedule.day.id == dayId && schedule.interval.id == intervalId);
+        let visible = !!schedules.find(schedule => 
+            +schedule.day.id == +dayId && 
+            this.getIntervalIdOfSchedule(schedule) == intervalId
+          );
         this.toggleSchedule(dayId, intervalId, visible);
       }
     }

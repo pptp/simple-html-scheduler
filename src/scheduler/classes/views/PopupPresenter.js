@@ -13,6 +13,7 @@ module.exports = class PopupPresenter {
 
   render(schedule, days) {
     this.schedule = schedule;
+    // console.log(schedule);
     this.els.popupContent.innerHTML = tplPopup({
       schedule: schedule,
       days: days

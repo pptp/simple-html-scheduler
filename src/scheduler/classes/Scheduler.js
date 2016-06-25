@@ -17,6 +17,10 @@ module.exports = class Scheduler {
       items: this.model.items,
       schedules: this.model.schedules,
     });
+
+    let filter = this.model.filterByItemIds();
+    // console.log("Filter:", filter);
+
     this.view.filter(this.model.filterByItemIds());
     this.view.turnAnimationOn();
 
@@ -37,8 +41,10 @@ module.exports = class Scheduler {
     });
 
     emitter.on('click-schedule', data => {
-      let schedule = this.model.findSchedule(data.dayId, data.intervalId);
-      this.calendar.popup(schedule);
+      let schedule = this.model.findSchedule(data.dayId, data.startMins);
+      if (schedule) {
+        this.calendar.popup(schedule);
+      }
     });
 
   }

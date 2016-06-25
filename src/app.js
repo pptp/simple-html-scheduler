@@ -8,12 +8,10 @@
 require("./scheduler/styles/scheduler.less");
 
 let Scheduler = require("./scheduler/index");
+let Config = require("./scheduler/classes/Config");
 
-// ajax({
-//   url: "./data/schedule.json",
-//   method: "GET",
-//   dataType: "json"
-// });
+Config(require("./config/config.json"));
+
 
 var xhr = new XMLHttpRequest();
 xhr.open('GET', encodeURI('./data/schedule.json'));
